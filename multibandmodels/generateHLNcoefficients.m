@@ -7,5 +7,5 @@ options = optimset('TolFun',1e-10, 'MaxIter', 400);
 
 f = @(a)hln(a,H,R);
 
-a = lsqnonlin(f,a0,[-1e9;-1e9;-1e9], ...
-    [1e9;1e9;1e9], options);
+a = lsqnonlin(f,a0,[1e-12;1e-12], ...
+    [1e9;1e9], options);

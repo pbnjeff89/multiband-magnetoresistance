@@ -1,19 +1,19 @@
 function [a2,a3,aHLN,a2h,a3h] = compareModels(Hxx,Rxx,Hxy,Rxy)
 
-a02 = [1;1;1;1];
-a03 = [1;1;1;1;1;1];
-a0hln = [1;100;100];
-a0hln2 = [0.1;0.1;0.1;0.1;1;100;100];
-a0hln3 = [0.1;0.1;0.1;0.1;0.1;0.1;1;100;100];
+a02 = [180;0;140;0];
+a03 = [150;0;140;0;4700;0];
+a0hln = [0.1;0.5;1e7];
+a0hln2 = [180;0;140;0;1;1;3e6];
+a0hln3 = [140;0.000298;160;-0.000258;3000;-6.773291;1;1;3e6];
 
-HxxRange = [1;14];
+HxxRange = [1;53];
 HxyRange = [1;14];
 
-a2 = generateTwoBandCoefficients(a02,Hxx,Rxx,Hxy,Rxy,HxxRange,HxyRange);
+a2 = generateTwoBandCoefficients(a02,Hxx,Rxx,Hxy,Rxy,[1;45],HxyRange);
 a3 = generateThreeBandCoefficients(a03,Hxx,Rxx,Hxy,Rxy,HxxRange,HxyRange);
 aHLN = generateHLNcoefficients(a0hln,Hxx,Rxx,[1;14]);
-a2h = generateHLN2Coefficients(a0hln2,Hxx,Rxx,Hxy,Rxy);
-a3h = generateHLN3Coefficients(a0hln3,Hxx,Rxx,Hxy,Rxy);
+a2h = generateHLN2Coefficients(a0hln2,Hxx,Rxx,Hxy,Rxy,[1;45],HxyRange);
+a3h = generateHLN3Coefficients(a0hln3,Hxx,Rxx,Hxy,Rxy,HxxRange,HxyRange);
 
 % Print out coefficients
 
@@ -22,14 +22,14 @@ fprintf('Rho: Resistivity; Hall: Hall Coefficient\n\n')
 fprintf('Two-Band Model\n\n')
 fprintf('Rho 1: %.3f; Rho 2: %.3f\n', ...
     a2(1),a2(3))
-fprintf('Hall 1: %.3f; Hall 2: %.3f\n\n', ...
+fprintf('Hall 1:%.6f; Hall 2: %.6f\n\n', ...
     a2(2),a2(4))
 
 % Three-band model
 fprintf('Three-Band Model\n\n')
-fprintf('Rho 1: %.3f; Rho 3: %.3f; Rho 3: %.3f\n', ...
+fprintf('Rho 1: %.3f; Rho 2: %.3f; Rho 3: %.3f\n', ...
     a3(1),a3(3),a3(5))
-fprintf('Hall 1: %.3f; Hall 2: %.3f; Hall 3: %.3f\n\n', ...
+fprintf('Hall 1: %.6f; Hall 2: %.6f; Hall 3: %.6f\n\n', ...
     a3(2),a3(4),a3(6))
 
 % HLN model
@@ -41,7 +41,7 @@ fprintf('G(0): %.3f; alpha: %.3f; H_phi: %.3f\n\n', ...
 fprintf('Two-Band + HLN Model\n\n')
 fprintf('Rho 1: %.3f; Rho 2: %.3f\n', ...
     a2h(1),a2h(3))
-fprintf('Hall 1: %.3f; Hall 2: %.3f\n', ...
+fprintf('Hall 1: %.6f; Hall 2: %.6f\n', ...
     a2h(2),a2h(4))
 fprintf('G(0): %.3f; alpha: %.3f; H_phi: %.3f\n\n', ...
     a2h(5),a2h(6),a2h(7))
@@ -50,7 +50,7 @@ fprintf('G(0): %.3f; alpha: %.3f; H_phi: %.3f\n\n', ...
 fprintf('Three-Band + HLN Model\n\n')
 fprintf('Rho 1: %.3f; Rho 3: %.3f; Rho 3: %.3f\n', ...
     a3h(1),a3h(3),a3h(5))
-fprintf('Hall 1: %.3f; Hall 2: %.3f; Hall 3: %.3f\n', ...
+fprintf('Hall 1: %.6f; Hall 2: %.6f; Hall 3: %.6f\n', ...
     a3h(2),a3h(4),a3h(6))
 fprintf('G(0): %.3f; alpha: %.3f; H_phi: %.3f\n\n', ...
     a3h(7),a3h(8),a3h(9))
@@ -70,7 +70,7 @@ subplot(2,1,1);
 plot(Hxx,Rxx,'bo',Hxx,RxxModel2,'r-',Hxx,RxxModel3,'g-', ...
     Hxx,hlnModelR,'c-',Hxx,RxxModel2h,'k-',...
     Hxx,RxxModel3h,'y-')
-% ylim([55 100])
+%ylim([50;100])
 title('Magnetoresistance')
 xlabel('Field (Oe)')
 ylabel('Resistance (\Omega)')
